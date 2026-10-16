@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clyde Caiga · sysadmin heading to security</title>
+<meta name="description" content="Clyde Caiga, IT support engineer in Barcelona. Self-built homelab with pfSense, Active Directory and Proxmox, heading to SOC and red team.">
+<meta name="theme-color" content="#060607">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500..800&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="dots" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="Clyde Caiga, top"><span class="logo">CC</span><span class="status"><i></i>Open to work</span></a>
+  <nav class="pill" aria-label="Main">
+    <a href="#top" class="on">Home</a>
+    <a href="#lab">Lab</a>
+    <a href="#proof">Proof</a>
+    <a href="#stack">Stack</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="right">
+    <div class="swatches" role="group" aria-label="Accent colour">
+      <button type="button" data-accent="#ff4b2b" style="--s:#ff4b2b" aria-label="Red accent" aria-pressed="true"></button>
+      <button type="button" data-accent="#7ddc5b" style="--s:#7ddc5b" aria-label="Green accent" aria-pressed="false"></button>
+      <button type="button" data-accent="#4da3ff" style="--s:#4da3ff" aria-label="Blue accent" aria-pressed="false"></button>
+      <button type="button" data-accent="#ffc233" style="--s:#ffc233" aria-label="Amber accent" aria-pressed="false"></button>
+    </div>
+    <a class="cta" href="#contact">Hire me</a>
+    <button class="kbd" id="open-palette" aria-label="Open command menu"><span>Menu</span><kbd>⌘K</kbd></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO: the terminal is the first screen -->
+<section class="hero" id="top">
+  <p class="hello" data-rise>Hi, I'm</p>
+  <h1 data-rise style="--i:1"><span class="name" aria-label="Clyde">CLYDE</span></h1>
+  <p class="tag" data-rise style="--i:2">I keep systems running. Next, I learn to <em>break</em> them.</p>
+  <div class="term-wrap" data-rise style="--i:3">
+    <div class="term" id="term" role="region" aria-label="Interactive terminal">
+      <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>clyde@jnclydehl.local: ~</span></div>
+      <div class="term-body" id="term-out" aria-live="polite"></div>
+      <form class="term-in" id="term-form" autocomplete="off">
+        <label for="term-input" class="prompt">clyde@lab:~$</label>
+        <input id="term-input" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Type a command">
+      </form>
+      <div class="chips" id="chips" aria-label="Try a command">
+        <button type="button" data-cmd="whoami">whoami</button>
+        <button type="button" data-cmd="ls hosts">ls hosts</button>
+        <button type="button" data-cmd="certs">certs</button>
+        <button type="button" data-cmd="skills">skills</button>
+        <button type="button" data-cmd="sudo hire clyde">sudo hire clyde</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENTO -->
+<section class="bento" id="lab" aria-label="About and lab">
+
+  <article class="card about" data-card>
+    <h2>Barcelona. 19. Linux since 15.</h2>
+    <p>I'm an IT support engineer who got hooked on how systems fail. Enterprise support at Mango's offices with Intune, Autopilot and Entra ID. Five years looking after a church network as a volunteer, now Team Lead of IT.</p>
+    <p>At home I build a lab of firewalls and domain controllers to attack, watch and fix, in that order. Goal: <em>SOC analyst</em>, then red team.</p>
+    <ul class="langs"><li>Español</li><li>English, native</li><li>Català, limited</li><li>Tagalog</li><li>Français, basic</li></ul>
+  </article>
+
+  <article class="card topo" data-card>
+    <header class="card-h"><h2>The lab</h2><p id="topo-cap">jnclydehl.local. Tap a node.</p></header>
+    <svg id="topo" viewBox="0 0 720 340" role="img" aria-label="Network diagram: internet to pfSense to LAN, with two Proxmox nodes hosting an automation host, DC01 and WIN11-01">
+      <g class="links" fill="none">
+        <path id="p1" d="M60 170 H190"/>
+        <path id="p2" d="M290 170 H350"/>
+        <path id="p3" d="M350 170 C 400 170, 420 70, 470 70 H520"/>
+        <path id="p4" d="M350 170 C 400 170, 420 270, 470 270 H520"/>
+        <path id="p5" d="M620 70 H650"/>
+        <path id="p6" d="M620 270 H650"/>
+      </g>
+      <g class="packets" aria-hidden="true">
+        <circle r="4"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+        <circle r="4"><animateMotion dur="1.6s" begin="0.4s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+        <circle r="4"><animateMotion dur="2.2s" begin="0.8s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+        <circle r="4"><animateMotion dur="2.8s" begin="0.2s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion></circle>
+      </g>
+      <g class="node" tabindex="0" role="button" data-n="internet" transform="translate(10 140)"><rect width="100" height="60" rx="14"/><text x="50" y="35" text-anchor="middle">Internet</text></g>
+      <g class="node hot" tabindex="0" role="button" data-n="pfsense" transform="translate(190 130)"><rect width="100" height="80" rx="14"/><text x="50" y="38" text-anchor="middle">pfSense</text><text x="50" y="58" text-anchor="middle" class="sub">gateway</text></g>
+      <g class="node" tabindex="0" role="button" data-n="lan" transform="translate(300 150)"><rect width="50" height="40" rx="12"/><text x="25" y="25" text-anchor="middle" class="sub">LAN</text></g>
+      <g class="node" tabindex="0" role="button" data-n="a8" transform="translate(470 30)"><rect width="150" height="80" rx="14"/><text x="75" y="35" text-anchor="middle">Proxmox A8</text><text x="75" y="56" text-anchor="middle" class="sub">always on</text></g>
+      <g class="node" tabindex="0" role="button" data-n="claude" transform="translate(650 40)"><rect width="60" height="60" rx="14"/><text x="30" y="36" text-anchor="middle" class="sub">claude</text></g>
+      <g class="node" tabindex="0" role="button" data-n="lab" transform="translate(470 230)"><rect width="150" height="80" rx="14"/><text x="75" y="35" text-anchor="middle">proxmox-lab</text><text x="75" y="56" text-anchor="middle" class="sub">on demand</text></g>
+      <g class="node hot" tabindex="0" role="button" data-n="dc01" transform="translate(650 215)"><rect width="60" height="50" rx="14"/><text x="30" y="31" text-anchor="middle" class="sub">DC01</text></g>
+      <g class="node" tabindex="0" role="button" data-n="win11" transform="translate(650 275)"><rect width="60" height="50" rx="14"/><text x="30" y="31" text-anchor="middle" class="sub">WIN11</text></g>
+    </svg>
+  </article>
+
+  <article class="card path" id="path" data-card>
+    <header class="card-h"><h2>Exam path</h2><p>Six exams, in this order. None passed yet, and I say so.</p></header>
+    <ol class="certs">
+      <li class="now"><b>SC-900</b><span>Security fundamentals</span><i>next</i></li>
+      <li><b>AZ-900</b><span>Azure fundamentals</span></li>
+      <li><b>SC-300</b><span>Identity administrator</span></li>
+      <li><b>AZ-104</b><span>Azure administrator</span></li>
+      <li><b>MD-102</b><span>Endpoint administrator</span></li>
+      <li><b>SC-200</b><span>Security operations analyst</span></li>
+    </ol>
+  </article>
+
+  <article class="card exp" data-card>
+    <header class="card-h"><h2>Where I've worked</h2></header>
+    <ul class="rows">
+      <li><div><b>Founder</b><span>StudentBoard</span></div><em>2025</em></li>
+      <li><div><b>IT Support Technician</b><span>MANGO, retail IT</span></div><em>Jun to Sep 2026</em></li>
+      <li><div><b>Customer Technical Support</b><span>Brother USA</span></div><em>Jan to May 2026</em></li>
+      <li><div><b>ServiceDesk Intern</b><span>ERNI, Barcelona</span></div><em>Jul 2024 to Dec 2025</em></li>
+      <li><div><b>Team Lead of IT</b><span>Church, volunteer</span></div><em>5 yrs</em></li>
+    </ul>
+  </article>
+
+  <article class="card clock" data-card>
+    <p class="mini">Barcelona right now</p>
+    <p class="time" id="clock" aria-label="Local time in Barcelona">--:--</p>
+    <p class="mini" id="clock-sub">CET · Europe/Madrid</p>
+  </article>
+
+  <article class="card earned" data-card>
+    <header class="card-h"><h2>Credentials earned</h2><p>Real ones, with certificates on my LinkedIn.</p></header>
+    <ul class="rows tight">
+      <li><div><b>Junior Penetration Tester</b><span>Hack The Box Academy course</span></div><em>course</em></li>
+      <li><div><b>Vulnerability Assessment and Penetration Testing (VAPT)</b><span>Alison</span></div><em>Nov 2025</em></li>
+      <li><div><b>Networking Devices and Initial Configuration</b><span>Cisco Networking Academy</span></div><em>Jul 2024</em></li>
+      <li><div><b>Networking Basics</b><span>Cisco Networking Academy</span></div><em>Dec 2023</em></li>
+      <li><div><b>JavaScript Algorithms and Data Structures</b><span>freeCodeCamp</span></div><em>Dec 2023</em></li>
+      <li><div><b>Introduction to Cybersecurity</b><span>Cisco Networking Academy</span></div><em>Jul 2023</em></li>
+    </ul>
+  </article>
+
+  <article class="card learning" data-card>
+    <header class="card-h"><h2>Learning right now</h2><p>The queue, in my own words.</p></header>
+    <ul class="queue">
+      <li>Virtualization: Proxmox, VMs, VDI</li>
+      <li>Networking: pfSense, routing</li>
+      <li>Containers: Docker</li>
+      <li>Linux and sysadmin</li>
+      <li>Honeypots and red/blue team</li>
+    </ul>
+    <p class="mini">Education: CFGM Systems and Networks at Institut TIC de Barcelona.</p>
+  </article>
+</section>
+
+
+<!-- PROOF OF WORK -->
+<section class="proof" id="proof" aria-labelledby="proof-h">
+  <h2 id="proof-h" class="big" data-rise>Proof of <em>work</em></h2>
+  <p class="sub" data-rise style="--i:1">Not a skills list. Things I built, broke, fixed and wrote down.</p>
+
+  <ul class="why">
+    <li data-card><h3>I prove it both ways</h3><p>Every GPO I build is tested where it should apply and where it should not.</p></li>
+    <li data-card><h3>I write it down</h3><p>Every change goes in a log with what changed, why, and how I verified it.</p></li>
+    <li data-card><h3>I want a second pair of eyes</h3><p>A finding is only closed after someone other than the person who fixed it checks it live.</p></li>
+    <li data-card><h3>I say what I don't know</h3><p>My docs have a "Not evidenced" section. My exam path says none passed yet.</p></li>
+  </ul>
+
+  <div class="tabs" role="tablist" aria-label="Areas of work">
+    <button role="tab" id="t-ad" aria-controls="p-ad" aria-selected="true">Active Directory</button>
+    <button role="tab" id="t-iam" aria-controls="p-iam" aria-selected="false" tabindex="-1">Identity and IAM</button>
+    <button role="tab" id="t-sec" aria-controls="p-sec" aria-selected="false" tabindex="-1">Security ops</button>
+    <button role="tab" id="t-pen" aria-controls="p-pen" aria-selected="false" tabindex="-1">Pentesting</button>
+    <button role="tab" id="t-aut" aria-controls="p-aut" aria-selected="false" tabindex="-1">Automation</button>
+    <button role="tab" id="t-her" aria-controls="p-her" aria-selected="false" tabindex="-1">Hermes and playbooks</button>
+  </div>
+
+  <!-- AD -->
+  <div class="tp" id="p-ad" role="tabpanel" aria-labelledby="t-ad">
+    <article class="card c-5">
+      <header class="card-h"><h3>One domain, built twice</h3><p>ad.jnclydehl.local. I found it empty after a rebuild, so I rebuilt and verified everything over LDAP.</p></header>
+      <ul class="tree">
+        <li>Departments
+          <ul>
+            <li>IT <span>Users · Computers · Groups</span></li>
+            <li>Security <span>Users · Computers · Groups</span></li>
+            <li>Operations <span>Users · Computers · Groups</span></li>
+          </ul>
+        </li>
+        <li>Service Accounts</li>
+      </ul>
+      <p class="mini">Naming is a rule: <b>first.last</b> for daily use, <b>adm.first</b> for admin work only, <b>svc.app</b> for services. Separate admin accounts keep a stolen daily password from carrying admin rights.</p>
+    </article>
+
+    <article class="card c-7">
+      <header class="card-h"><h3>Five GPOs, each linked on purpose</h3><p>Open one to see why it sits where it sits, and how I proved it.</p></header>
+      <div class="acc">
+        <details><summary><b>Default Domain Policy</b><span>domain root</span></summary><p>Password length 14, history 24, complexity on. Lockout after 5 attempts for 15 minutes. Account policy is only read from the GPO linked at the root. <i>Proof:</i> Get-ADDefaultDomainPasswordPolicy, then a real lockout test on a test user and Unlock-ADAccount.</p></details>
+        <details><summary><b>GPO-Workstation-Baseline</b><span>Departments</span></summary><p>Firewall on in all profiles with inbound blocked, screen lock at 10 minutes, SMBv1 disabled. One link on the parent OU reaches every child. <i>Proof:</i> gpresult, Get-NetFirewallProfile, EnableSMB1Protocol False.</p></details>
+        <details><summary><b>GPO-Local-Admins</b><span>Departments</span></summary><p>SG_IT_Admins added to local Administrators. People go into groups, groups go onto resources, nobody is named directly. <i>Proof:</i> elevation worked for the admin account and failed for a standard IT user.</p></details>
+        <details><summary><b>GPO-Operations-Restrictions</b><span>Operations/Users</span></summary><p>Control Panel and Settings blocked. User-side settings follow the user object. <i>Proof:</i> blocked for one user, normal for another user in a different OU.</p></details>
+        <details><summary><b>GPO-Security-PSLogging</b><span>Security/Computers</span></summary><p>PowerShell script block logging, event 4104. Computer-side scope follows the computer object. <i>Proof:</i> see the live test below.</p></details>
+      </div>
+    </article>
+
+    <article class="card c-7">
+      <header class="card-h"><h3>Move a PC, watch the policy follow</h3><p>The test I ran on WIN11-01. Pick its OU.</p></header>
+      <div class="seg" role="group" aria-label="WIN11-01 location">
+        <button type="button" data-ou="ops" aria-pressed="true">Operations/Computers</button>
+        <button type="button" data-ou="sec" aria-pressed="false">Security/Computers</button>
+      </div>
+      <ul class="gpo-out" id="gpo-out" aria-live="polite"></ul>
+    </article>
+
+    <article class="card c-5">
+      <header class="card-h"><h3>Password policy, before and after</h3></header>
+      <ul class="ba">
+        <li><span>Minimum length</span><b>7</b><i>→</i><b class="n">14</b></li>
+        <li><span>Lockout threshold</span><b>0</b><i>→</i><b class="n">5</b></li>
+        <li><span>Lockout duration</span><b>30 min</b><i>→</i><b class="n">15 min</b></li>
+        <li><span>Maximum age</span><b>42 days</b><i>→</i><b class="n">365 days</b></li>
+      </ul>
+      <p class="mini">Trade-off accepted and written down: handle-based usernames are guessable, so the lockout policy and monitoring carry that risk.</p>
+    </article>
+  </div>
+
+  <!-- IAM -->
+  <div class="tp" id="p-iam" role="tabpanel" aria-labelledby="t-iam" hidden>
+    <article class="card c-6">
+      <header class="card-h"><h3>Conditional Access, done safely</h3></header>
+      <ul class="steps">
+        <li>Entra ID P2 trial on an Azure free tenant, because Conditional Access is a Premium feature.</li>
+        <li>Created a <b>break-glass admin first</b>, excluded from every policy, so a mistake cannot lock me out.</li>
+        <li>Built <b>CA001 Require MFA</b> for a pilot group in <b>Report-only</b>, read the sign-in logs, then turned it On.</li>
+        <li><b>Found:</b> with Security Defaults enabled, custom policies are not evaluated at all. Disabled it, confirmed CA001 matched.</li>
+      </ul>
+    </article>
+
+    <article class="card c-6">
+      <header class="card-h"><h3>SSO, step by step</h3><p>Pick a protocol. This is the round trip I tested.</p></header>
+      <div class="seg" role="group" aria-label="Protocol">
+        <button type="button" data-proto="saml" aria-pressed="true">SAML</button>
+        <button type="button" data-proto="oidc" aria-pressed="false">OIDC</button>
+      </div>
+      <ol class="flow" id="flow" aria-live="polite"></ol>
+    </article>
+
+    <article class="card c-7">
+      <header class="card-h"><h3>What I set up</h3></header>
+      <ul class="rows tight">
+        <li><div><b>Entra ID, SAML</b><span>Gallery SAML Toolkit as an enterprise app, assigned to a pilot group</span></div><em>built</em></li>
+        <li><div><b>Entra ID, OIDC</b><span>Single-tenant app registration, delegated openid, profile, email, token checked on jwt.ms</span></div><em>built</em></li>
+        <li><div><b>Okta Integrator org, OIDC</b><span>Second identity provider with MFA enforced on the Okta side</span></div><em>built</em></li>
+        <li><div><b>Mock Okta and Slack providers</b><span>Rogue OIDC endpoints in Python to test detection of malicious app registrations</span></div><em>attack side</em></li>
+      </ul>
+    </article>
+
+    <article class="card c-5">
+      <header class="card-h"><h3>Concepts I work with</h3></header>
+      <ul class="tags"><li class="w">RBAC</li><li class="w">SAML</li><li class="w">OAuth 2.0</li><li class="w">OIDC</li><li class="w">SCIM</li><li class="w">Zero Trust</li><li class="w">MFA</li><li class="w">Break-glass accounts</li><li class="w">Least privilege</li></ul>
+      <p class="mini">Next: SC-300, the identity administrator exam, built around the same lab.</p>
+    </article>
+  </div>
+
+  <!-- SECURITY OPS -->
+  <div class="tp" id="p-sec" role="tabpanel" aria-labelledby="t-sec" hidden>
+    <article class="card c-5">
+      <header class="card-h"><h3>A security process, not just tools</h3></header>
+      <ul class="sev">
+        <li><b>Urgent</b><span>exploitable now, real impact</span><i>7 days</i></li>
+        <li><b>Soon</b><span>needs a foothold or a mistake</span><i>30 days</i></li>
+        <li><b>Later</b><span>hardening, small exposure</span><i>90 days</i></li>
+        <li><b>Watch</b><span>accepted risk, reviewed</span><i>monthly</i></li>
+      </ul>
+      <p class="mini">Rating is impact times likelihood, each 1 to 3. Every finding has an owner and a decision: fix, reduce or accept, with a written reason. Weekly check, monthly patch window, quarterly full audit.</p>
+    </article>
+
+    <article class="card c-7">
+      <header class="card-h"><h3>Incident log</h3><p>Three real incidents from my lab, each with root cause, fix and verification. Open one.</p></header>
+      <div class="acc">
+        <details><summary><b>Wrong VM renamed</b><span>Sep 24</span></summary><p><i>Cause:</i> DC01 was renamed to WIN11-01 in the wrong console (computer objects cannot be renamed from ADUC by design). <i>Fix:</i> snapshot first, rename back from the machine, delete the stale DNS record. <i>Verified:</i> RootDSE dnsHostName, the _ldap and _kerberos SRV records and every SPN pointed at DC01 again.</p></details>
+        <details><summary><b>WAN routing broken after reboot</b><span>Sep 16</span></summary><p><i>Cause:</i> no default gateway pinned in pfSense, so automatic selection picked the LAN gateway on every reload. <i>Fix:</i> pin WAN_DHCP as default gateway. <i>Verified:</i> gateway status showed WAN as default and internet came back.</p></details>
+        <details><summary><b>Alert lost in the same outage as the report</b><span>Sep 27</span></summary><p><i>Cause:</i> a DNS blip broke the report, and the failure alert hit the same blip. <i>Fix:</i> SMTP retries with a local failure log. <i>Verified:</i> retry logic tested with a mocked client that failed twice, then recovered.</p></details>
+      </div>
+    </article>
+
+    <article class="card c-6">
+      <header class="card-h"><h3>Detection I built</h3></header>
+      <ul class="steps">
+        <li>PowerShell script block logging by GPO, event 4104 captured on the client.</li>
+        <li>Weekly Monday audit of the lab, reported by email and on a private security page.</li>
+        <li>SOC triage practice in a SOC simulator, the analyst side of the same loop.</li>
+        <li>Private dashboards behind Tailscale and sandboxed systemd units.</li>
+      </ul>
+    </article>
+
+    <article class="card c-6">
+      <header class="card-h"><h3>Next on the blue side</h3></header>
+      <ul class="steps">
+        <li>Central logging and a SIEM for the lab.</li>
+        <li>Sysmon and Windows event forwarding from DC01 and WIN11-01.</li>
+        <li>SC-200 as the exam for it.</li>
+      </ul>
+    </article>
+  </div>
+
+  <!-- PENTEST -->
+  <div class="tp" id="p-pen" role="tabpanel" aria-labelledby="t-pen" hidden>
+    <article class="card c-12">
+      <header class="card-h"><h3>My order: understand, attack, detect, fix</h3><p>I build the system first, then break it, then write the detection. Tools come after the fundamentals.</p></header>
+      <ol class="track">
+        <li class="now"><b>Base</b><span>Methodology, web, Linux, a bit of Python and Bash</span><i>now</i></li>
+        <li><b>Junior pentest</b><span>Easy and medium boxes, client-style reports</span></li>
+        <li><b>AD offensive</b><span>A full chain from user to domain admin in my own lab, with detections</span></li>
+        <li><b>First security job</b><span>I apply from stage 2, I do not wait</span></li>
+        <li><b>Red team</b><span>Evasion, C2, phishing, after real experience</span></li>
+      </ol>
+    </article>
+
+    <article class="card c-6">
+      <header class="card-h"><h3>Rules I hold myself to</h3></header>
+      <ul class="steps">
+        <li>No notes means not learned: technique, command, why it works.</li>
+        <li>One hour on a problem before a hint. Then I log which enumeration step I missed.</li>
+        <li>One platform paid at a time.</li>
+        <li>No cert purchase until I have written reports to show.</li>
+      </ul>
+    </article>
+
+    <article class="card c-6">
+      <header class="card-h"><h3>Built for the attack side</h3></header>
+      <ul class="rows tight">
+        <li><div><b>Mock OAuth providers</b><span>Fake Okta and Slack OIDC servers that issue fake tokens, to test detection of rogue app registrations</span></div><em>Python</em></li>
+        <li><div><b>Sandboxed agent range</b><span>A contained range where AI agents practise pentesting against lab targets</span></div><em>lab</em></li>
+        <li><div><b>Attacker VM</b><span>Kali on Proxmox, on demand</span></div><em>lab</em></li>
+      </ul>
+    </article>
+
+    <article class="card c-7">
+      <header class="card-h"><h3>Learning and credentials</h3></header>
+      <ul class="rows tight">
+        <li><div><b>Junior Penetration Tester</b><span>Hack The Box Academy course</span></div><em>course</em></li>
+        <li><div><b>SOC analyst practice</b><span>Hands-on in a SOC simulator</span></div><em>simulator</em></li>
+        <li><div><b>Vulnerability Assessment and Penetration Testing</b><span>Alison</span></div><em>Nov 2025</em></li>
+        <li><div><b>Introduction to Cybersecurity</b><span>Cisco Networking Academy</span></div><em>Jul 2023</em></li>
+        <li><div><b>Basic cybersecurity concepts</b><span>IT Academy, Barcelona Activa</span></div><em>course</em></li>
+      </ul>
+    </article>
+
+    <article class="card c-5">
+      <header class="card-h"><h3>Toolbox</h3><p>Honest about what I use and what is next.</p></header>
+      <ul class="tags">
+        <li class="c">Kali</li><li class="c">Nmap</li><li class="c">Wireshark</li><li class="c">Proxmox labs</li><li class="c">Cisco IOS</li><li class="c">Packet Tracer</li>
+        <li class="n">BloodHound</li><li class="n">Impacket</li><li class="n">NetExec</li><li class="n">Sliver</li>
+      </ul>
+      <p class="legend"><span class="c">using</span><span class="n">next, in my AD lab</span></p>
+    </article>
+  </div>
+
+  <!-- AUTOMATION -->
+  <div class="tp" id="p-aut" role="tabpanel" aria-labelledby="t-aut" hidden>
+    <article class="card c-7">
+      <header class="card-h"><h3>A deploy robot with minimal rights</h3><p>CI/CD from GitHub to my Proxmox node.</p></header>
+      <ol class="flow">
+        <li>A push to GitHub starts the deploy workflow.</li>
+        <li>The runner joins my private Tailscale network with a <b>tagged OAuth client</b> that can reach one host on one port and nothing else.</li>
+        <li>It logs in with a <b>restricted SSH key</b>. The lock on the host limits what the key may run.</li>
+        <li>A <b>watchdog timer</b> checks the result every 60 seconds and keeps a log.</li>
+        <li>No secrets live in the repo. Keys are GitHub secrets, with a rotation procedure written in the docs.</li>
+      </ol>
+    </article>
+
+    <article class="card c-5">
+      <header class="card-h"><h3>Scripts I wrote</h3></header>
+      <ul class="rows tight">
+        <li><div><b>Python GUI tool</b><span>tkinter interface for work</span></div><em>Python</em></li>
+        <li><div><b>DDI validation tool</b><span>DNS, DHCP and IP address data checks</span></div><em>Python</em></li>
+        <li><div><b>Bulk AD password reset</b><span>from a list, not by hand</span></div><em>PowerShell</em></li>
+        <li><div><b>Deploy and repair scripts</b><span>orphan taps, down interfaces, deploy</span></div><em>Bash</em></li>
+      </ul>
+    </article>
+
+    <article class="card c-6">
+      <header class="card-h"><h3>Systemd, not hope</h3></header>
+      <ul class="steps">
+        <li>Reports at 08:00 and 22:00 run as systemd timers with timeouts.</li>
+        <li>Failures send an alert, retry on network errors and log locally if mail is down.</li>
+        <li>Units are sandboxed and servers check the Host header.</li>
+      </ul>
+    </article>
+
+    <article class="card c-6">
+      <header class="card-h"><h3>Judgment, not just code</h3></header>
+      <p>I designed a semi-automatic job search pipeline that collects, ranks and drafts, and then <b>stops for my review</b>. Full auto-apply is rejected on purpose: the platforms ban bots and a mistake would go out under my name. Design is written, the Python is mine to build.</p>
+    </article>
+  </div>
+
+  <!-- HERMES -->
+  <div class="tp" id="p-her" role="tabpanel" aria-labelledby="t-her" hidden>
+    <article class="card c-7">
+      <header class="card-h"><h3>Hermes dashboard</h3><p>My own second brain: what to do today, where the roadmap stands, what the lab is doing, and the job search, on one page.</p></header>
+      <ul class="rows tight">
+        <li><div><b>The one thing</b><span>a single priority picked for the day, fewer choices, faster start</span></div><em>hero</em></li>
+        <li><div><b>Errands</b><span>one list written by Hermes, tick off, progress fills up</span></div><em>daily</em></li>
+        <li><div><b>Fortune</b><span>live job processes and follow-ups due, not the full list</span></div><em>jobs</em></li>
+        <li><div><b>The road</b><span>phases and cert path as a stepper, driven by finished modules</span></div><em>career</em></li>
+        <li><div><b>Sentinels</b><span>host checks, git, systemd, automation logs</span></div><em>lab</em></li>
+        <li><div><b>Wisdom</b><span>a lesson a day, no repeats until all are used</span></div><em>learn</em></li>
+      </ul>
+    </article>
+
+    <article class="card c-5">
+      <header class="card-h"><h3>Built to be safe</h3></header>
+      <ul class="steps">
+        <li>Data is built on one server, served by another, and reachable only over Tailscale.</li>
+        <li>Mail and calendar come through an AI call limited to two read-only tools. Email content is treated as untrusted input.</li>
+        <li>The page can only write one thing: a task tick.</li>
+        <li>Never port-forwarded. The tailnet is the boundary.</li>
+      </ul>
+    </article>
+
+    <article class="card c-7">
+      <header class="card-h"><h3>Playbooks: a lab academy I built</h3><p>I could not do big lab phases from a wall of docs, so I built step-by-step playbooks, like a Moodle or Hack The Box module. Hub, phase, module.</p></header>
+      <div class="step-mock" data-ui>
+        <p class="sm-h"><b>Step</b> Link the GPO to the Departments OU</p>
+        <dl>
+          <div><dt>Where</dt><dd>Group Policy Management, then Departments, then Link an existing GPO</dd></div>
+          <div><dt>Do</dt><dd>One action, one command, nothing hidden</dd></div>
+          <div><dt>Expect</dt><dd>The GPO appears under the OU, linked and enabled</dd></div>
+          <div><dt>Warn</dt><dd>What breaks if you link at the wrong level</dd></div>
+          <div><dt>Your output</dt><dd>Paste the result and a screenshot. Secrets are masked.</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="card c-5">
+      <header class="card-h"><h3>From practice to proof</h3></header>
+      <ol class="flow">
+        <li>I tick steps and attach my output and screenshots.</li>
+        <li>The evidence becomes a draft document automatically.</li>
+        <li>Before it is published, I cross-check it live over a read-only LDAP account.</li>
+        <li>The doc lists what is <b>Not evidenced</b>.</li>
+      </ol>
+      <p class="mini">Written so far: Group Policy (36 steps), Entra ID core and SSO (15 steps each), plus security practice and remote desktop modules. Tracks planned for identity, Azure and security.</p>
+    </article>
+  </div>
+
+  <div class="hire" data-card>
+    <p>Looking for someone who documents, verifies and keeps learning?</p>
+    <a class="btn3d" href="#contact">Let's talk</a>
+  </div>
+</section>
+
+
+<!-- STACK -->
+<section class="stack-sec" id="stack" aria-labelledby="stack-h">
+  <h2 id="stack-h" class="big" data-rise>The <em>stack</em></h2>
+  <p class="sub" data-rise style="--i:1">50 tools, labelled by where I used them. Tap a level to filter.</p>
+  <div class="seg lv-seg" role="group" aria-label="Filter by level" data-rise style="--i:2">
+    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="work" aria-pressed="false"><i class="d dk-work"></i>Used at work</button>
+    <button type="button" data-f="lab" aria-pressed="false"><i class="d dk-lab"></i>Built in my lab</button>
+    <button type="button" data-f="built" aria-pressed="false"><i class="d dk-built"></i>Shipped in a product</button>
+    <button type="button" data-f="school" aria-pressed="false"><i class="d dk-school"></i>School and courses</button>
+    <button type="button" data-f="learn" aria-pressed="false"><i class="d dk-learn"></i>Learning now</button>
+  </div>
+  <div class="sk-grid">
+<article class="card sk" data-card><h3>Infrastructure</h3><ul class="chips2"><li data-lv="lab">Proxmox</li><li data-lv="lab">pfSense</li><li data-lv="lab">Debian and Linux</li><li data-lv="lab">LXC</li><li data-lv="lab">Docker</li><li data-lv="lab">nginx</li><li data-lv="lab">systemd</li><li data-lv="lab">Tailscale</li><li data-lv="lab">Syncthing</li><li data-lv="lab">SSH keys</li><li data-lv="work">DNS and DHCP</li><li data-lv="lab">VLANs</li></ul></article>
+<article class="card sk" data-card><h3>Microsoft and identity</h3><ul class="chips2"><li data-lv="lab">Active Directory</li><li data-lv="lab">Group Policy</li><li data-lv="work">Entra ID</li><li data-lv="work">Intune</li><li data-lv="work">Autopilot</li><li data-lv="work">Azure</li><li data-lv="lab">Conditional Access</li><li data-lv="lab">Okta</li><li data-lv="lab">SAML and OIDC</li><li data-lv="lab">MFA</li></ul></article>
+<article class="card sk" data-card><h3>Security</h3><ul class="chips2"><li data-lv="lab">Kali Linux</li><li data-lv="lab">Nmap</li><li data-lv="lab">Wireshark</li><li data-lv="lab">SIEM</li><li data-lv="school">Hack The Box</li><li data-lv="school">SOC simulator</li><li data-lv="learn">Sysmon</li><li data-lv="learn">BloodHound</li><li data-lv="learn">Impacket</li><li data-lv="learn">NetExec</li><li data-lv="learn">Honeypots</li></ul></article>
+<article class="card sk" data-card><h3>Code and automation</h3><ul class="chips2"><li data-lv="lab">Python</li><li data-lv="work">PowerShell</li><li data-lv="lab">Bash</li><li data-lv="lab">Git</li><li data-lv="lab">GitHub Actions</li><li data-lv="lab">Claude Code and MCP</li><li data-lv="built">Flutter and Dart</li><li data-lv="built">FlutterFlow</li><li data-lv="built">Supabase</li><li data-lv="built">Firebase</li><li data-lv="school">JavaScript</li></ul></article>
+<article class="card sk" data-card><h3>Support and networking</h3><ul class="chips2"><li data-lv="work">Jira</li><li data-lv="work">ISL Online</li><li data-lv="work">Service desk</li><li data-lv="work">Hardware support</li><li data-lv="school">Cisco IOS</li><li data-lv="school">Packet Tracer</li></ul></article>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work" aria-labelledby="work-h">
+  <h2 id="work-h" class="big" data-rise>Things I <em>built</em></h2>
+  <div class="projects">
+    <article class="proj" data-card tabindex="0">
+      <div class="proj-top"><h3>Hermes</h3><span class="tagline">Python · systemd · Claude</span></div>
+      <p>Morning and evening reports built from lab state, mail and calendar, plus a small dashboard with host health, security audits and my job search. Also a sandboxed range where AI agents practise pentesting against lab targets.</p>
+    </article>
+    <article class="proj" data-card tabindex="0">
+      <div class="proj-top"><h3>Mock OAuth apps</h3><span class="tagline">Flask · OIDC · red team</span></div>
+      <p>Fake Okta and Slack identity providers, built to test whether rogue app registrations and malicious OAuth flows get detected. The attack side of my identity track.</p>
+    </article>
+    <article class="proj" data-card tabindex="0">
+      <div class="proj-top"><h3>StudentBoard</h3><span class="tagline">Flutter · Supabase · 2025</span></div>
+      <p>Founded a student and junior jobs network, led four volunteers, owned security and GDPR. CI/CD built, tested and deployed; beta on TestFlight and Google Play with about 25 to 30 testers. It stalled for lack of companies, and it taught me more than any course.</p>
+    </article>
+    <article class="proj" data-card tabindex="0">
+      <div class="proj-top"><h3>Church network</h3><span class="tagline">pfSense migration · real users</span></div>
+      <p>Five years as volunteer sysadmin, now Team Lead of IT. Network, servers, streaming and website, currently moving over to pfSense.</p>
+    </article>
+    <article class="proj" data-card tabindex="0">
+      <div class="proj-top"><h3>AD from scratch</h3><span class="tagline">DC01 · GPOs · PowerShell</span></div>
+      <p>Departmental OUs, groups, users and GPOs. Traced a failed domain join to a DNS zone loading delay and fixed the root cause. Bulk password reset scripted in PowerShell.</p>
+    </article>
+  </div>
+
+  <div class="bento second">
+    
+    <article class="card hobby wide" data-card>
+      <header class="card-h"><h2>Off the clock</h2></header>
+      <ul class="mana">
+        <li><i style="--c:#f4f0d6"></i>MTG Commander</li>
+        <li><i style="--c:#ff4b2b"></i>Smaug, mono-red treasure</li>
+        <li><i style="--c:#2d9cff"></i>Guitar</li>
+        <li><i style="--c:#7ddc5b"></i>JDM cars</li>
+        <li><i style="--c:#b08cff"></i>A2 licence, eyeing a CBR650R</li>
+        <li><i style="--c:#9aa0a6"></i>Marvel comics</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact" aria-labelledby="contact-h">
+  <h2 id="contact-h" class="big" data-rise>Let's <em>talk</em>.</h2>
+  <p class="sub" data-rise style="--i:1">Hiring for support, systems or security? I reply fast.</p>
+  <div class="mail-row" data-rise style="--i:2">
+    <button class="mail" id="copy" type="button" aria-label="Copy email address">
+      <span class="addr">clyde.john253@gmail.com</span>
+      <span class="hint" id="copy-hint">Tap to copy</span>
+    </button>
+    <a class="btn3d" href="mailto:clyde.john253@gmail.com?subject=Hello%20Clyde">Send an email</a>
+  </div>
+  <p class="socials" data-rise style="--i:3"><a href="https://github.com/ClydeWasEjected">GitHub</a><a href="https://www.linkedin.com/in/clydejcaiga">LinkedIn</a></p>
+</section>
+</main>
+
+<footer class="foot"><p>Built by hand, no frameworks. Barcelona, 2026.</p></footer>
+
+<dialog id="palette" aria-label="Command menu">
+  <form method="dialog" class="pal">
+    <input id="pal-in" placeholder="Jump to…" aria-label="Search" autocomplete="off">
+    <ul id="pal-list" role="listbox"></ul>
+  </form>
+</dialog>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<script src="script.js"></script>
+</body>
+</html>
