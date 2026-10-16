@@ -80,8 +80,13 @@
 
   /* ---------- email: built on click, never in the page source ---------- */
   const mailBtn = $('#mail-btn');
-  mailBtn.addEventListener('click', (e) => { e.preventDefault(); location.href = mailto('Hello Clyde'); });
-  mailBtn.setAttribute('href', '#contact');
+  if (mailBtn) {
+    mailBtn.addEventListener('click', (e) => { e.preventDefault(); location.href = mailto('Hello Clyde'); });
+    mailBtn.setAttribute('href', '#contact');
+  }
+  // old cached pages may still have the copy button: make it send mail too
+  const oldCopy = $('#copy');
+  if (oldCopy) oldCopy.addEventListener('click', () => { location.href = mailto('Hello Clyde'); });
 
   /* ---------- accent colour ---------- */
   function setAccent(c) {
@@ -164,6 +169,20 @@
       kick();
     });
     $('.hero').addEventListener('pointerleave', () => { ls.forEach((l) => { l.ty = 0; l.tr = 0; }); kick(); });
+  }
+
+  /* ---------- hero name on touch screens: idle wave, letters jump when tapped ---------- */
+  if (nm && !reduce && !matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const txt2 = nm.textContent; nm.textContent = '';
+    nm.classList.add('touch');
+    [...txt2].forEach((ch, k) => {
+      const sp = document.createElement('span');
+      sp.textContent = ch; sp.setAttribute('aria-hidden', 'true'); sp.style.setProperty('--k', k);
+      sp.addEventListener('pointerdown', () => {
+        sp.animate([{ transform: 'translateY(0) rotate(0deg)' }, { transform: 'translateY(-34px) rotate(-7deg)' }, { transform: 'translateY(0) rotate(0deg)' }], { duration: 520, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+      });
+      nm.appendChild(sp);
+    });
   }
 
   /* ---------- terminal ---------- */
