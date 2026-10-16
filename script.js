@@ -83,6 +83,89 @@
   mailBtn.addEventListener('click', (e) => { e.preventDefault(); location.href = mailto('Hello Clyde'); });
   mailBtn.setAttribute('href', '#contact');
 
+  /* ---------- accent colour ---------- */
+  function setAccent(c) {
+    document.documentElement.style.setProperty('--accent', c);
+    document.querySelector('meta[name=theme-color]');
+    $$('.swatches button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.accent === c)));
+    try { localStorage.setItem('accent', c); } catch {}
+  }
+  $$('.swatches button').forEach((b) => b.addEventListener('click', () => setAccent(b.dataset.accent)));
+  try { const a = localStorage.getItem('accent'); if (a) setAccent(a); } catch {}
+
+  /* ---------- effects: matrix rain + confetti ---------- */
+  const cv = $('#fx'), g = cv.getContext('2d');
+  let raf = 0;
+  const size = () => { cv.width = innerWidth; cv.height = innerHeight; };
+  const stop = () => { cancelAnimationFrame(raf); g.clearRect(0, 0, cv.width, cv.height); cv.classList.remove('on'); };
+  const fx = {
+    matrix() {
+      if (reduce) return;
+      stop(); size(); cv.classList.add('on');
+      const cols = Math.floor(cv.width / 18), drops = Array(cols).fill(0).map(() => Math.random() * -40);
+      const t0 = performance.now();
+      const frame = (t) => {
+        g.fillStyle = 'rgba(0,0,0,0.12)'; g.fillRect(0, 0, cv.width, cv.height);
+        g.fillStyle = '#7ddc5b'; g.font = '16px JetBrains Mono, monospace';
+        drops.forEach((y, i) => {
+          g.fillText(String.fromCharCode(0x30a0 + Math.random() * 96), i * 18, y * 18);
+          drops[i] = y * 18 > cv.height && Math.random() > 0.975 ? 0 : y + 1;
+        });
+        if (t - t0 < 7000) raf = requestAnimationFrame(frame); else stop();
+      };
+      raf = requestAnimationFrame(frame);
+    },
+    confetti() {
+      if (reduce) return;
+      stop(); size(); cv.classList.remove('on');
+      const colors = [getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ff4b2b', '#ffffff', '#7ddc5b', '#4da3ff', '#ffc233'];
+      const ps = Array.from({ length: 140 }, () => ({ x: innerWidth / 2, y: innerHeight * 0.6, vx: (Math.random() - 0.5) * 16, vy: -Math.random() * 16 - 4, r: Math.random() * 6 + 3, c: colors[(Math.random() * colors.length) | 0], a: 1 }));
+      const frame = () => {
+        g.clearRect(0, 0, cv.width, cv.height);
+        let alive = 0;
+        ps.forEach((p) => { p.vy += 0.4; p.x += p.vx; p.y += p.vy; p.a -= 0.008; if (p.a > 0) { alive++; g.globalAlpha = p.a; g.fillStyle = p.c; g.fillRect(p.x, p.y, p.r, p.r * 1.6); } });
+        g.globalAlpha = 1;
+        if (alive) raf = requestAnimationFrame(frame); else stop();
+      };
+      raf = requestAnimationFrame(frame);
+    }
+  };
+  cv.addEventListener('click', stop);
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') stop(); });
+  addEventListener('resize', () => { if (cv.classList.contains('on')) size(); });
+  // Konami code
+  const KON = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let kp = 0;
+  addEventListener('keydown', (e) => { kp = e.key === KON[kp] ? kp + 1 : (e.key === KON[0] ? 1 : 0); if (kp === KON.length) { kp = 0; fx.matrix(); } });
+
+  /* ---------- hero name reacts to the cursor ---------- */
+  const nm = $('.hero .name');
+  if (nm && !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const txt = nm.textContent; nm.textContent = '';
+    const ls = [...txt].map((ch) => { const s = document.createElement('span'); s.textContent = ch; s.setAttribute('aria-hidden', 'true'); nm.appendChild(s); return { el: s, y: 0, r: 0, ty: 0, tr: 0 }; });
+    let run2 = false;
+    const loop = () => {
+      let moving = false;
+      ls.forEach((l) => {
+        l.y += (l.ty - l.y) * 0.14; l.r += (l.tr - l.r) * 0.14;
+        if (Math.abs(l.ty - l.y) > 0.05 || Math.abs(l.tr - l.r) > 0.02) moving = true;
+        l.el.style.transform = `translate3d(0,${l.y.toFixed(2)}px,0) rotate(${l.r.toFixed(2)}deg)`;
+      });
+      if (moving) requestAnimationFrame(loop); else run2 = false;
+    };
+    const kick = () => { if (!run2) { run2 = true; requestAnimationFrame(loop); } };
+    $('.hero').addEventListener('pointermove', (e) => {
+      ls.forEach((l) => {
+        const r = l.el.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+        const k = Math.max(0, 1 - Math.hypot(dx, dy) / 380);
+        l.ty = -k * 22; l.tr = (dx / 380) * -5 * k;
+      });
+      kick();
+    });
+    $('.hero').addEventListener('pointerleave', () => { ls.forEach((l) => { l.ty = 0; l.tr = 0; }); kick(); });
+  }
+
   /* ---------- terminal ---------- */
   const out = $('#term-out'), form = $('#term-form'), input = $('#term-input');
   const history = []; let hi = 0;
