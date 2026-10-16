@@ -2,13 +2,14 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const EMAIL = 'clyde.john253@gmail.com';
+  const EMAIL = ['clyde.john253', 'gmail.com'].join('@');
+  const mailto = (subject) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
 
   /* ---------- content shared by terminal, diagram and menu ---------- */
   const HOSTS = {
     internet: ['Internet', 'Everything outside. Nothing reaches the lab without going through pfSense first.'],
-    pfsense: ['pfSense', 'Gateway and firewall. Ruleset audited, explicit allow and deny rules (never any-any), logging on, NAT verified. Next: VLANs for management, servers, clients, security lab and IoT.'],
-    lan: ['LAN', 'One flat subnet today. VLAN segmentation is the next phase.'],
+    pfsense: ['pfSense', 'Gateway and firewall. Ruleset audited, explicit allow and deny rules (never any-any), logging on, NAT verified. Segmented with VLANs, with traffic between them controlled by pfSense rules.'],
+    lan: ['LAN', 'The lab network, segmented with VLANs and controlled by pfSense rules.'],
     a8: ['Proxmox A8', 'Always-on node. Runs pfSense and the service containers. Rule I keep: infrastructure-critical machines never live on a node that gets switched off.'],
     claude: ['Automation host', 'Always-on Debian container running Claude Code, with Syncthing keeping my notes in sync and Hermes running on systemd timers.'],
     lab: ['proxmox-lab', 'Second node on a gaming PC. Hosts the lab VMs and runs only when I need it.'],
@@ -77,97 +78,10 @@
     n.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
   });
 
-  /* ---------- copy email ---------- */
-  const copy = $('#copy'), hint = $('#copy-hint');
-  copy.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(EMAIL); hint.textContent = 'Copied'; copy.classList.add('done'); }
-    catch { hint.textContent = 'Press Ctrl+C on the address'; }
-    setTimeout(() => { hint.textContent = 'Tap to copy'; copy.classList.remove('done'); }, 1800);
-  });
-
-
-  /* ---------- accent colour ---------- */
-  function setAccent(c) {
-    document.documentElement.style.setProperty('--accent', c);
-    document.querySelector('meta[name=theme-color]');
-    $$('.swatches button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.accent === c)));
-    try { localStorage.setItem('accent', c); } catch {}
-  }
-  $$('.swatches button').forEach((b) => b.addEventListener('click', () => setAccent(b.dataset.accent)));
-  try { const a = localStorage.getItem('accent'); if (a) setAccent(a); } catch {}
-
-  /* ---------- effects: matrix rain + confetti ---------- */
-  const cv = $('#fx'), g = cv.getContext('2d');
-  let raf = 0;
-  const size = () => { cv.width = innerWidth; cv.height = innerHeight; };
-  const stop = () => { cancelAnimationFrame(raf); g.clearRect(0, 0, cv.width, cv.height); cv.classList.remove('on'); };
-  const fx = {
-    matrix() {
-      if (reduce) return;
-      stop(); size(); cv.classList.add('on');
-      const cols = Math.floor(cv.width / 18), drops = Array(cols).fill(0).map(() => Math.random() * -40);
-      const t0 = performance.now();
-      const frame = (t) => {
-        g.fillStyle = 'rgba(0,0,0,0.12)'; g.fillRect(0, 0, cv.width, cv.height);
-        g.fillStyle = '#7ddc5b'; g.font = '16px JetBrains Mono, monospace';
-        drops.forEach((y, i) => {
-          g.fillText(String.fromCharCode(0x30a0 + Math.random() * 96), i * 18, y * 18);
-          drops[i] = y * 18 > cv.height && Math.random() > 0.975 ? 0 : y + 1;
-        });
-        if (t - t0 < 7000) raf = requestAnimationFrame(frame); else stop();
-      };
-      raf = requestAnimationFrame(frame);
-    },
-    confetti() {
-      if (reduce) return;
-      stop(); size(); cv.classList.remove('on');
-      const colors = [getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ff4b2b', '#ffffff', '#7ddc5b', '#4da3ff', '#ffc233'];
-      const ps = Array.from({ length: 140 }, () => ({ x: innerWidth / 2, y: innerHeight * 0.6, vx: (Math.random() - 0.5) * 16, vy: -Math.random() * 16 - 4, r: Math.random() * 6 + 3, c: colors[(Math.random() * colors.length) | 0], a: 1 }));
-      const frame = () => {
-        g.clearRect(0, 0, cv.width, cv.height);
-        let alive = 0;
-        ps.forEach((p) => { p.vy += 0.4; p.x += p.vx; p.y += p.vy; p.a -= 0.008; if (p.a > 0) { alive++; g.globalAlpha = p.a; g.fillStyle = p.c; g.fillRect(p.x, p.y, p.r, p.r * 1.6); } });
-        g.globalAlpha = 1;
-        if (alive) raf = requestAnimationFrame(frame); else stop();
-      };
-      raf = requestAnimationFrame(frame);
-    }
-  };
-  cv.addEventListener('click', stop);
-  addEventListener('keydown', (e) => { if (e.key === 'Escape') stop(); });
-  addEventListener('resize', () => { if (cv.classList.contains('on')) size(); });
-  // Konami code
-  const KON = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-  let kp = 0;
-  addEventListener('keydown', (e) => { kp = e.key === KON[kp] ? kp + 1 : (e.key === KON[0] ? 1 : 0); if (kp === KON.length) { kp = 0; fx.matrix(); } });
-
-  /* ---------- hero name reacts to the cursor ---------- */
-  const nm = $('.hero .name');
-  if (nm && !reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    const txt = nm.textContent; nm.textContent = '';
-    const ls = [...txt].map((ch) => { const s = document.createElement('span'); s.textContent = ch; s.setAttribute('aria-hidden', 'true'); nm.appendChild(s); return { el: s, y: 0, r: 0, ty: 0, tr: 0 }; });
-    let run2 = false;
-    const loop = () => {
-      let moving = false;
-      ls.forEach((l) => {
-        l.y += (l.ty - l.y) * 0.14; l.r += (l.tr - l.r) * 0.14;
-        if (Math.abs(l.ty - l.y) > 0.05 || Math.abs(l.tr - l.r) > 0.02) moving = true;
-        l.el.style.transform = `translate3d(0,${l.y.toFixed(2)}px,0) rotate(${l.r.toFixed(2)}deg)`;
-      });
-      if (moving) requestAnimationFrame(loop); else run2 = false;
-    };
-    const kick = () => { if (!run2) { run2 = true; requestAnimationFrame(loop); } };
-    $('.hero').addEventListener('pointermove', (e) => {
-      ls.forEach((l) => {
-        const r = l.el.getBoundingClientRect();
-        const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
-        const k = Math.max(0, 1 - Math.hypot(dx, dy) / 380);
-        l.ty = -k * 22; l.tr = (dx / 380) * -5 * k;
-      });
-      kick();
-    });
-    $('.hero').addEventListener('pointerleave', () => { ls.forEach((l) => { l.ty = 0; l.tr = 0; }); kick(); });
-  }
+  /* ---------- email: built on click, never in the page source ---------- */
+  const mailBtn = $('#mail-btn');
+  mailBtn.addEventListener('click', (e) => { e.preventDefault(); location.href = mailto('Hello Clyde'); });
+  mailBtn.setAttribute('href', '#contact');
 
   /* ---------- terminal ---------- */
   const out = $('#term-out'), form = $('#term-form'), input = $('#term-input');
@@ -212,7 +126,7 @@
       '<span class="hl">code</span>  Python, PowerShell, Flutter, Git'
     ],
     contact: () => [
-      `email     <a href="mailto:${EMAIL}">${EMAIL}</a>`,
+      'email     <a href="#" data-mail="Hello Clyde">Send me an email</a>',
       'github    <a href="https://github.com/ClydeWasEjected">ClydeWasEjected</a>',
       'linkedin  <a href="https://www.linkedin.com/in/clydejcaiga">clydejcaiga</a>'
     ],
@@ -226,7 +140,7 @@
     },
     sudo: (a) => {
       if (a.join(' ') === 'hire clyde') {
-        setTimeout(() => { location.href = `mailto:${EMAIL}?subject=${encodeURIComponent('Let\'s hire you')}`; }, 900);
+        setTimeout(() => { location.href = mailto('Let\'s hire you'); }, 900);
         return ['<span class="g">[sudo] permission granted.</span>', 'Opening your mail client…'];
       }
       return ['sudo: nice try. Only <span class="hl">sudo hire clyde</span> is allowed here.'];
@@ -296,7 +210,7 @@
   COMMANDS.submit = (a) => {
     if ((a[0] || '') !== FLAG) return ['<span class="hl">Wrong flag.</span> Keep looking.'];
     if (!solved) { solved = true; fx.confetti(); }
-    return ['<span class="g">Flag accepted. You found it.</span>', `Now write to me: <a href="mailto:${EMAIL}?subject=I%20found%20the%20flag">${EMAIL}</a>`];
+    return ['<span class="g">Flag accepted. You found it.</span>', 'Now write to me: <a href="#" data-mail="I found the flag">Send an email</a>'];
   };
   COMMANDS.matrix = () => { fx.matrix(); return ['Wake up, Neo… <span class="dim">(Esc or click to leave)</span>']; };
   COMMANDS.theme = (a) => {
@@ -464,6 +378,7 @@
     const res = fn ? fn(args) : [`${esc(c)}: command not found. Try <span class="hl">help</span>.`];
     res.forEach((l) => line(l));
   };
+  out.addEventListener('click', (e) => { const m = e.target.closest('[data-mail]'); if (m) { e.preventDefault(); location.href = mailto(m.dataset.mail); } });
   form.addEventListener('submit', (e) => { e.preventDefault(); run(input.value); input.value = ''; });
   input.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowUp' && history.length) { e.preventDefault(); hi = Math.max(0, hi - 1); input.value = history[hi]; }
@@ -478,7 +393,7 @@
   const dlg = $('#palette'), pin = $('#pal-in'), plist = $('#pal-list');
   const ITEMS = [
     ['Home', '#top'], ['The lab', '#lab'], ['Exam path', '#path'], ['Proof of work', '#proof'], ['The stack', '#stack'], ['Active Directory', 'tab:t-ad'], ['Identity and IAM', 'tab:t-iam'], ['Security ops', 'tab:t-sec'], ['Pentesting', 'tab:t-pen'], ['Automation', 'tab:t-aut'], ['Hermes and playbooks', 'tab:t-her'], ['Things I built', '#work'], ['Contact', '#contact'],
-    ['Copy email', 'copy'], ['GitHub', 'https://github.com/ClydeWasEjected'], ['LinkedIn', 'https://www.linkedin.com/in/clydejcaiga']
+    ['Send an email', 'mail'], ['GitHub', 'https://github.com/ClydeWasEjected'], ['LinkedIn', 'https://www.linkedin.com/in/clydejcaiga']
   ];
   let sel = 0, shown = ITEMS;
   const draw = () => {
@@ -486,7 +401,7 @@
     shown.forEach(([t, h], i) => {
       const li = document.createElement('li');
       li.setAttribute('role', 'option'); li.setAttribute('aria-selected', String(i === sel));
-      li.innerHTML = `<span>${t}</span><small>${h.startsWith('http') ? '↗' : h === 'copy' ? 'copy' : h.startsWith('tab:') ? 'proof' : h}</small>`;
+      li.innerHTML = `<span>${t}</span><small>${h.startsWith('http') ? '↗' : h === 'mail' ? 'email' : h.startsWith('tab:') ? 'proof' : h}</small>`;
       li.addEventListener('click', () => go(i));
       plist.appendChild(li);
     });
@@ -494,7 +409,7 @@
   const go = (i) => {
     const it = shown[i]; if (!it) return; dlg.close();
     if (it[1].startsWith('tab:')) { selectTab(document.getElementById(it[1].slice(4))); location.hash = '#proof'; }
-    else if (it[1] === 'copy') copy.click();
+    else if (it[1] === 'mail') location.href = mailto('Hello Clyde');
     else if (it[1].startsWith('http')) window.open(it[1], '_blank', 'noopener');
     else location.hash = it[1];
   };
